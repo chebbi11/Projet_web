@@ -48,7 +48,7 @@ class EvenementController extends AbstractController
         $Events = $paginator->paginate(
             $pagination,
             $request->query->getInt('page', 1), /*page number*/
-            3 /*limit per page*/
+            2/*limit per page*/
         );
         return $this->render('evenement/evenementFront.html.twig', [
             'evenements' => $Events,
