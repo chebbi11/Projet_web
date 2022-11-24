@@ -34,6 +34,8 @@
                 <td>
                     <a href="{{ path('app_reservation_evenement_show', {'idReservationEvenement': reservation_evenement.idReservationEvenement}) }}">show</a>
                     <a href="{{ path('app_reservation_evenement_edit', {'idReservationEvenement': reservation_evenement.idReservationEvenement}) }}">edit</a>
+                    <a href="{{ path('app_reservation_evenement_facture', {'id': reservation_evenement.idReservationEvenement}) }}">PDF</a>
+
                 </td>
             </tr>
         {% else %}
@@ -44,8 +46,6 @@
 
         </tbody>
     </table>
-    <div class="pagination">
-        {{ knp_pagination_render(reservation_evenements) }}
-    </div>
+
 </div>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Evenement;
+use App\Entity\FitreRecherche;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,34 @@ class EvenementRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+
+
+    public function AfficherEvenement(FitreRecherche $search)
+    {
+        $entityManager= $this->getEntityManager();
+if(!$search->getTitre())
+{
+
+    $query=$entityManager
+        ->createQuery("select e from App\Entity\Evenement e");
+
+
+}
+
+else {
+
+    $query=$entityManager
+        ->createQuery("select e from App\Entity\Evenement e where 
+                     (e.titre LIKE :titre)")
+        ->setParameter('titre', $search->getTitre());
+}
+
+
+        return $query->getResult() ;
+
+    }
+
 
 //    /**
 //     * @return Evenement[] Returns an array of Evenement objects

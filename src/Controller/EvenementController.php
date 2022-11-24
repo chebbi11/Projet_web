@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Evenement;
+use App\Entity\FitreRecherche;
 use App\Entity\ReservationEvenement;
 use App\Form\EvenementType;
+use App\Form\FitreRechercheType;
 use App\Form\ReservationEvenementType;
 use App\Repository\EvenementRepository;
 use App\Repository\ReservationEvenementRepository;
@@ -35,7 +37,13 @@ class EvenementController extends AbstractController
     #[Route('/eventfront', name: 'eventfront', methods: ['GET'])]
     public function eventfront(EvenementRepository $evenementRepository, PaginatorInterface $paginator,Request $request,): Response
     {
-        $pagination  = $evenementRepository->findAll();
+
+        $search = new FitreRecherche();
+        $form = $this->createForm(FitreRechercheType::class, $search);
+        $form->handleRequest($request);
+
+  $pagination  = $evenementRepository->AfficherEvenement($search);
+ //       $pagination  = $evenementRepository->findAll();
 
         $Events = $paginator->paginate(
             $pagination,
@@ -44,6 +52,8 @@ class EvenementController extends AbstractController
         );
         return $this->render('evenement/evenementFront.html.twig', [
             'evenements' => $Events,
+            'form' => $form->createView()
+
         ]);
     }
 
@@ -143,8 +153,10 @@ class EvenementController extends AbstractController
         $reservationEvenement = new ReservationEvenement();
         $form = $this->createForm(ReservationEvenementType::class, $reservationEvenement);
         $form->handleRequest($request);
-
+        $events = $evenementRepository->find($id);
         if ($form->isSubmitted() && $form->isValid()) {
+            $reservationEvenement->setTotale($events->getTarif()*$reservationEvenement->getNbPlace());
+            //calculer la total des réservations (tarif event * nb place de réservations)
             $reservationEvenement->setEvenement($id);
 
             $reservationEvenementRepository->save($reservationEvenement, true);

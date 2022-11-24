@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Evenement;
 use App\Entity\ReservationEvenement;
 use App\Form\ReservationEvenementType;
 use App\Repository\EvenementRepository;
@@ -29,20 +28,11 @@ class ReservationEvenementController extends AbstractController
     }
 
     #[Route('/reservationfront', name: 'reservationfront', methods: ['GET'])]
-    public function reservationfront(ReservationEvenementRepository $reservationEvenementRepository, PaginatorInterface $paginator,Request $request,): Response
+    public function reservationfront(ReservationEvenementRepository $reservationEvenementRepository): Response
     {
-        $pagination  = $this->getDoctrine()
-            ->getRepository(Evenement::class)
-            ->findAll();
-
-        $reservationEvents = $paginator->paginate(
-            $pagination,
-            $request->query->getInt('page', 1), /*page number*/
-            3 /*limit per page*/
-        );
         dump($reservationEvenementRepository->findAll());
         return $this->render('reservation_evenement/reservationFront.html.twig', [
-            'reservation_evenements' => $reservationEvents,
+            'reservation_evenements' => $reservationEvenementRepository->findAll(),
         ]);
 
     }
@@ -53,7 +43,6 @@ class ReservationEvenementController extends AbstractController
         $reservationEvenement = new ReservationEvenement();
         $form = $this->createForm(ReservationEvenementType::class, $reservationEvenement);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $reservationEvenementRepository->save($reservationEvenement, true);
 
@@ -94,7 +83,7 @@ class ReservationEvenementController extends AbstractController
         ]);
     }
 
-    #[Route('/{idReservationEvenement}', name: 'app_reservation_evenement_delete', methods: ['GET'])]
+    #[Route('/{idReservationEvenement}', name: 'app_reservation_evenement_delete', methods: ['POST'])]
     public function delete(Request $request, ReservationEvenement $reservationEvenement, ReservationEvenementRepository $reservationEvenementRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reservationEvenement->getIdReservationEvenement(), $request->request->get('_token'))) {
@@ -111,8 +100,6 @@ class ReservationEvenementController extends AbstractController
         $id = $request->get("id");
 
         $reservationEvent= $repository->find(id:$id);
-
-
 
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
@@ -148,8 +135,11 @@ class ReservationEvenementController extends AbstractController
         // Output the generated PDF to Browser (inline view)
         $dompdf->stream("mypdf.pdf", [
             "Attachment" => false
-        ]);
 
+        ]);
+        return new Response('', 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
 
 
 

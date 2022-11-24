@@ -22,7 +22,6 @@
 
 </head>
 <body>
-{% for reservation_event in reservation_events %}
     <div class="col-xs-12">
         <h2 class="page-header">
 
@@ -39,7 +38,7 @@
                 <address>
                     <strong>safe eye.tn </strong><br>
                     Tunis-Esprit<br>
-                    Phone: (+216) (+216) 51 407 244<br>
+                    Phone:  (+216) 51 407 244<br>
                     Email:Contact@safe eye.tn
 
                 </address></div>
@@ -50,10 +49,7 @@
     <br><br><br>
     <table width="100%">
         <tr>
-            {% for client in client %}
 
-                <td style="font-size: large;color: #2653d4;position: left;text-transform: uppercase;" ><strong>Facture pour : </strong>{{ client.nom }} {{ client.prenom }}</td>
-            {% endfor %}
 
         </tr>
 
@@ -75,18 +71,18 @@
         </thead>
         <tbody>
         <tr style="font-size: medium;">
-            <th scope="row" style="text-transform: uppercase;">{{ reservation_event.idReservationEvenement }}</th>
-            <td align="right">{{ reservation_event.nbPlace }}</td>
-            <td align="right">{{ reservation_event.modePaiement }}</td>
-            <td align="right">{{ reservation_event.idUser }}</td>
-            <td align="right">{{ reservation_event.total / reservation_event.nbPlace  }}</td>
+            <th scope="row" style="text-transform: uppercase;">{{ reservation_events.idReservationEvenement }}</th>
+            <td align="right">{{ reservation_events.nbPlace }}</td>
+            <td align="right">{{ reservation_events.modePaiement }}</td>
+            <td align="right">{{ reservation_events.idUser }}</td>
+            <td align="right">{{ reservation_events.totale / reservation_events.nbPlace  }}</td>
 
         </tr>
 
         <tr style="font-size: medium;">
             <td colspan="3"></td>
             <td align="right" style="font-weight: bold;">Total (en dt)</td>
-            <td align="right" class="gray">{{ reservation_event.total}}</td>
+            <td align="right" class="gray">{{ reservation_events.totale}}</td>
         </tr>
 
         </tfoot>
@@ -98,6 +94,5 @@
 
 
 
-{% endfor %}
 </body>
 </html>

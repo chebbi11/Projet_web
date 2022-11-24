@@ -38,11 +38,11 @@ class EvenementType extends AbstractType
             ->add('capacite')
             ->add('nbReservation')
             ->add('etat',HiddenType::class,[
-                'attr'=>['name'=>'emplacement',
+                'attr'=>['name'=>'etat',
                     'id'=>'etat']])
             ->add('nbReservation',HiddenType::class,[
                 'attr'=>['name'=>'nbReservation',
-                    'id'=>'etat']])
+                    'id'=>'nbReservation']])
             ->add('pour')
             ->add('dateAjout',DateType::class,
                 ['data'   => new \DateTime(),
